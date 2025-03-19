@@ -1,8 +1,8 @@
 import streamlit as st
-from menu.page import Page
 from menu.artistic_accompaniment import ArtisticAccompaniment
+from menu.page import Page
 from utils.components import *
-from utils.functions import component_effect_underline
+from utils.functions import *
 from utils.user import logout
 from data.get_data import *
 

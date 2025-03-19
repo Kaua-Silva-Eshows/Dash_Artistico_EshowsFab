@@ -3,8 +3,8 @@ from data.dbconnect import get_dataframe_from_query
 
 
 @st.cache_data
-def fabrica_invoicing_couvent():
-  return get_dataframe_from_query(""" 
+def fabrica_invoicing_couvent(day1, day2):
+  return get_dataframe_from_query(f""" 
 SELECT
     TE.NOME_FANTASIA AS 'Loja',
     DATE_FORMAT(IV.EVENT_DATE, '%d/%m/%Y') AS 'Data Evento',
@@ -17,7 +17,10 @@ SELECT
   LEFT JOIN T_ITENS_VENDIDOS_TIPOS IVT ON ICV.FK_TIPO = IVT.ID
   LEFT JOIN T_EMPRESAS TE ON IV.LOJA_ID = TE.ID_ZIGPAY
   WHERE ICV2.DESCRICAO = 'Couvert'
-  	AND TE.ID = 148
+  AND TE.ID = 148
+  AND IV.EVENT_DATE >= '{day1}'
+  AND IV.EVENT_DATE <= '{day2}'
   GROUP BY IV.EVENT_DATE
-  ORDER BY IV.EVENT_DATE
+  ORDER BY YEAR(IV.EVENT_DATE), MONTH(IV.EVENT_DATE), DAY(IV.EVENT_DATE)
+
   """, use_fabrica=True)

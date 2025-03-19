@@ -5,7 +5,6 @@ from st_aggrid import GridUpdateMode
 from streamlit_echarts import st_echarts
 from st_aggrid import StAggridTheme  # Certifique-se de ter importado o tema
 
-
 def component_hide_sidebar():
     st.markdown(""" 
     <style>
@@ -23,6 +22,22 @@ def component_fix_tab_echarts():
     """
 
     return st.markdown(streamlit_style, unsafe_allow_html=True)
+
+def component_effect_underline():
+    st.markdown("""
+    <style>
+        .full-width-line-white {
+            width: 100%;
+            border-bottom: 1px solid #ffffff;
+            margin-bottom: 0.5em;
+        }
+        .full-width-line-black {
+            width: 100%;
+            border-bottom: 1px solid #000000;
+            margin-bottom: 0.5em;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 def component_plotDataframe(df, name, height=400):
     st.markdown(f"<h5 style='text-align: center; background-color: #ffb131; padding: 0.1em;'>{name}</h5>", unsafe_allow_html=True)

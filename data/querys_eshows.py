@@ -4,8 +4,8 @@ from data.dbconnect import get_dataframe_from_query
 
 
 @st.cache_data
-def eshows_custes():
-  return get_dataframe_from_query("""
+def eshows_custes(day1, day2):
+  return get_dataframe_from_query(f"""
 SELECT 
     DATE_FORMAT(P.DATA_INICIO, '%d/%m/%Y') AS 'Data Evento',
     SUM(P.VALOR_BRUTO) AS 'Valor Gasto'
@@ -14,13 +14,15 @@ SELECT
   WHERE C.ID = '1504'
     AND P.FK_STATUS_PROPOSTA IS NOT NULL
     AND P.FK_STATUS_PROPOSTA NOT IN ('102')
+    AND P.DATA_INICIO >= '{day1}'
+    AND P.DATA_INICIO <= '{day2}'                                  
   GROUP BY YEAR(P.DATA_INICIO), MONTH(P.DATA_INICIO), DAY(P.DATA_INICIO)
   ORDER BY YEAR(P.DATA_INICIO), MONTH(P.DATA_INICIO), DAY(P.DATA_INICIO)
   """)
 
 
 @st.cache_data
-def eshows_proposals():
+def eshows_proposals(day1, day2):
   return get_dataframe_from_query(f"""
 SELECT 
     P.ID AS 'ID Proposta',
@@ -34,4 +36,7 @@ SELECT
   WHERE C.ID = '1504'
 	AND P.FK_STATUS_PROPOSTA IS NOT NULL
 	AND P.FK_STATUS_PROPOSTA NOT IN ('102')
+  AND P.DATA_INICIO >= '{day1}'
+  AND P.DATA_INICIO <= '{day2}'  
+  ORDER BY YEAR(P.DATA_INICIO), MONTH(P.DATA_INICIO), DAY(P.DATA_INICIO)
   """)   
