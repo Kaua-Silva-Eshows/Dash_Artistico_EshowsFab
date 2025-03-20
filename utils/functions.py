@@ -47,23 +47,28 @@ def function_copy_dataframe_as_tsv(df):
         height=100
     )
 
-def function_rename_stores(df_eshows, df_fabrica):
+def function_rename_stores(df_eshows, df_fabrica=None):
     rename_df_eshows = {
-    'Jacaré ': 'Jacaré',
-    'Bar Brahma': 'Bar Brahma',
-    'Bar dos Arcos - Salão Dourado': 'Arcos',
-    'Bar Brahma Granja': 'Granja'
+        'Jacaré ': 'Jacaré',
+        'Bar Brahma': 'Bar Brahma',
+        'Bar dos Arcos - Salão Dourado': 'Arcos',
+        'Bar Brahma Granja': 'Granja'
     }
+    
     rename_df_fabrica = {
-    'Jacaré ': 'Jacaré',
-    'Bar Brahma - Centro': 'Bar Brahma',
-    'Arcos': 'Arcos',
-    'Bar Brahma - Granja' : 'Granja'
+        'Jacaré ': 'Jacaré',
+        'Bar Brahma - Centro': 'Bar Brahma',
+        'Arcos': 'Arcos',
+        'Bar Brahma - Granja': 'Granja'
     }
-      
+    
     df_eshows['Loja'] = df_eshows['Loja'].replace(rename_df_eshows)
-    df_fabrica['Loja'] = df_fabrica['Loja'].replace(rename_df_fabrica)
-    return df_eshows, df_fabrica
+
+    if df_fabrica is not None:
+        df_fabrica['Loja'] = df_fabrica['Loja'].replace(rename_df_fabrica)
+        return df_eshows, df_fabrica
+    
+    return df_eshows
 
 def funtion_calculate_percentage(new_value, old_value):
     if old_value == 0:  

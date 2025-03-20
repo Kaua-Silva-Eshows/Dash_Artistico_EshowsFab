@@ -49,56 +49,31 @@ def BuildArtisticAccompaniment(fabricaInvoicingCouvent, eshowsCustes, eshowsProp
         merged_df2.fillna(0, inplace=True)
         merged_df2['Lucro'] = merged_df2['Valor Liquido'] - merged_df2['Valor Gasto']
 
+        selected_stores = st.multiselect("Selecione a Loja", merged_df['Loja'].unique(), default=merged_df['Loja'].unique(), key='lojas_artistic_accompaniment')
 
+        filtered_merged_df = merged_df[merged_df['Loja'].isin(selected_stores)]
+        filtered_merged_df2 = merged_df2[merged_df2['Loja'].isin(selected_stores)]
 
-        row2_1 = st.columns(5)
+        row2_1 = st.columns([2,1.5,2])
 
-        
-        tile = row2_1[0].container(border=True)    
-        total_profit = merged_df['Lucro'].sum()
-        total_profit2 = merged_df2['Lucro'].sum()
+        tile = row2_1[1].container(border=True)    
+        total_profit = filtered_merged_df['Lucro'].sum()
+        total_profit2 = filtered_merged_df2['Lucro'].sum()
         percentage_difference, percentage_color, arrow = funtion_calculate_percentage(total_profit, total_profit2)
         total_profit = f"{total_profit:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Total Periodo:</br><span style='font-size: 18px;'>{total_profit}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
-        tile = row2_1[1].container(border=True)
-        total_profit_arcos = merged_df.loc[merged_df['Loja'] == 'Arcos', 'Lucro'].sum()
-        total_profit_arcos2 = merged_df2.loc[merged_df2['Loja'] == 'Arcos', 'Lucro'].sum()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(total_profit_arcos, total_profit_arcos2)
-        total_profit_arcos = f"{total_profit_arcos:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Arcos Periodo:</br><span style='font-size: 18px;'>{total_profit_arcos}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
-
-        tile = row2_1[2].container(border=True)
-        total_profit_Brahma = merged_df.loc[merged_df['Loja'] == 'Bar Brahma', 'Lucro'].sum()
-        total_profit_Brahma2 = merged_df2.loc[merged_df2['Loja'] == 'Bar Brahma', 'Lucro'].sum()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(total_profit_Brahma, total_profit_Brahma2)
-        total_profit_Brahma = f"{total_profit_Brahma:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Brahma Periodo:</br><span style='font-size: 18px;'>{total_profit_Brahma}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
-        tile = row2_1[3].container(border=True)
-        total_profit_Granja = merged_df.loc[merged_df['Loja'] == 'Granja', 'Lucro'].sum()
-        total_profit_Granja2 = merged_df2.loc[merged_df2['Loja'] == 'Granja', 'Lucro'].sum()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(total_profit_Granja, total_profit_Granja2)
-        total_profit_Granja = f"{total_profit_Granja:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Granja Periodo:</br><span style='font-size: 18px;'>{total_profit_Granja}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
-
-        tile = row2_1[4].container(border=True)
-        total_profit_Jacare = merged_df.loc[merged_df['Loja'] == 'Jacaré', 'Lucro'].sum()
-        total_profit_Jacare2 = merged_df2.loc[merged_df2['Loja'] == 'Jacaré', 'Lucro'].sum()
-        percentage_difference, percentage_color, arrow = funtion_calculate_percentage(total_profit_Jacare, total_profit_Jacare2)
-        total_profit_Jacare = f"{total_profit_Jacare:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Jacaré Periodo:</br><span style='font-size: 18px;'>{total_profit_Jacare}</span></br><span style='font-size: 10px; color: {percentage_color};'>{percentage_difference:.2f}% {arrow}</span></p>", unsafe_allow_html=True)
     
-        merged_df = function_format_columns_number(merged_df, ['Valor Bruto', 'Desconto', 'Valor Liquido', 'Valor Gasto', 'Lucro'])
-        filtered_copy, count = component_plotDataframe(merged_df, "Lucro Geral")
+        filtered_merged_df = function_format_columns_number(filtered_merged_df, ['Valor Bruto', 'Desconto', 'Valor Liquido', 'Valor Gasto', 'Lucro'])
+        filtered_copy, count = component_plotDataframe(filtered_merged_df, "Lucro Geral", height=420)
         function_copy_dataframe_as_tsv(filtered_copy)
 
 
     with row[1]:
         eshowsProposals = eshows_proposals(day_ArtisticAccompaniment1, day_ArtisticAccompaniment2)
-        eshowsProposals = function_format_columns_number(eshowsProposals, ['Valor Bruto'])
-        filtered_copy, count = component_plotDataframe(eshowsProposals, "Propostas", height=496)
+        eshowsProposals = function_rename_stores(eshowsProposals)
+        filter_eshowsProposals = eshowsProposals[eshowsProposals['Loja'].isin(selected_stores)]
+        eshowsProposals = function_format_columns_number(filter_eshowsProposals, ['Valor Bruto'])
+        filtered_copy, count = component_plotDataframe(filter_eshowsProposals, "Propostas", height=620)
         function_copy_dataframe_as_tsv(filtered_copy)
 
 class ArtisticAccompaniment(Page):
