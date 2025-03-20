@@ -41,11 +41,14 @@ def BuildArtisticAccompaniment(fabricaInvoicingCouvent, eshowsCustes, eshowsProp
         tile.write(f"<p style='text-align: center; font-size: 12px;'>Lucro Total Periodo:</br><span style='font-size: 18px;'>{total_profit}</span></p>", unsafe_allow_html=True)
     
         filtered_copy, count = component_plotDataframe(merged_df, "Lucro Geral")
+        function_copy_dataframe_as_tsv(filtered_copy)
+
 
     with row[1]:
         eshowsProposals = eshows_proposals(day_ArtisticAccompaniment1, day_ArtisticAccompaniment2)
         eshowsProposals = function_format_columns_number(eshowsProposals, ['Valor Bruto'])
         filtered_copy, count = component_plotDataframe(eshowsProposals, "Propostas", height=496)
+        function_copy_dataframe_as_tsv(filtered_copy)
 
 class ArtisticAccompaniment(Page):
     def render(self):
