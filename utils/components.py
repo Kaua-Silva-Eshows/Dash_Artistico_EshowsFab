@@ -2,7 +2,6 @@ import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid.shared import JsCode
 from st_aggrid import GridUpdateMode
-from streamlit_echarts import st_echarts
 from st_aggrid import StAggridTheme  # Certifique-se de ter importado o tema
 
 def component_hide_sidebar():
