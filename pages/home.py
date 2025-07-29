@@ -5,16 +5,19 @@ from utils.components import *
 from utils.functions import *
 from utils.user import logout
 from data.get_data import *
+from streamlit_theme import st_theme
 
 def render():
     # pegando dados da sessão como ID e NOME
     user_id = st.session_state['user_data']["data"]["user_id"]
     user_name = st.session_state['user_data']["data"]['full_name']
-
-    col1, col2, col3 = st.columns([3.5,0.5,0.3])
+    theme = st_theme(key=f"theme_")
+    base_theme = theme.get("base") if theme else "default"
+    st.session_state["base_theme"] = base_theme
+    col1, col2, col3 = st.columns([3,0.8,0.4])
     
     col1.write(f"## Olá, "+user_name)
-    col2.image("./assets/imgs/eshows100x100.png")
+    col2.image("./assets/imgs/Eshows-Fabrica-logo.png")
     col3.markdown("<p style='padding-top:0.0em'></p>", unsafe_allow_html=True)
     col3.button(label="Logout", on_click=logout)
     
@@ -37,7 +40,7 @@ if __name__ == "__main__":
     if 'jwt_token' not in st.session_state:
         st.switch_page("main.py")
     
-    st.set_page_config(page_title="Home | Resultados Eshows x Fabrica",page_icon="./assets/imgs/eshows-logo100x100.png", layout="wide")
+    st.set_page_config(page_title="Home | Resultados Eshows x Fabrica",page_icon="./assets/imgs/eshows_fab-logo.png", layout="wide")
 
     component_hide_sidebar()
     component_fix_tab_echarts()

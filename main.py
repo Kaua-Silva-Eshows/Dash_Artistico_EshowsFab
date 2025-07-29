@@ -1,3 +1,4 @@
+import base64
 import requests
 import streamlit as st
 from utils.jwt_utils import *
@@ -47,9 +48,29 @@ def main():
         st.switch_page("pages/home.py")
 
 def show_login_page():
-    col1, col2 = st.columns([4,1])
+    col1, col2, col3 = st.columns([6,1,1])
     col1.write("## DashBoard Acompanhamento Eshows X Fabrica")
-    col2.image("./assets/imgs/eshows-logo.png", width=100)
+
+    with col2:
+        st.markdown(
+            """
+            <div style="margin-top: 40px;">
+                <img src="data:image/png;base64,{}" width="100"/>
+            </div>
+            """.format(base64.b64encode(open("./assets/imgs/eshows-logo.png", "rb").read()).decode()),
+            unsafe_allow_html=True
+        )
+
+    with col3:
+        st.markdown(
+            """
+            <div style="margin-top: 40px;">
+                <img src="data:image/png;base64,{}" width="70"/>
+            </div>
+            """.format(base64.b64encode(open("./assets/imgs/logo_FB.png", "rb").read()).decode()),
+            unsafe_allow_html=True
+        )
+
     userName = st.text_input(label="", value="", placeholder="login")
     userPassword = st.text_input(label="", value="", placeholder="Senha",type="password")
     if st.button("login"):
@@ -67,7 +88,7 @@ if __name__ == "__main__":
     initialize_session_state()
     st.set_page_config(
     page_title="login | Acompanhamento Eshows X Fabrica",
-    page_icon="./assets/imgs/eshows-logo100x100.png",
+    page_icon="./assets/imgs/eshows_fab-logo.png",
     layout="centered",
     )
 
