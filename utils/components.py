@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 from st_aggrid import GridUpdateMode, JsCode, StAggridTheme
 from st_aggrid import AgGrid, GridOptionsBuilder
-from streamlit_echarts import st_echarts
 
 def component_hide_sidebar():
     st.markdown(""" 
