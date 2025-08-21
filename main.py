@@ -22,7 +22,10 @@ def authenticate(userName: str, userPassword: str):
     try :
         response = requests.post('https://api.eshows.com.br/v1/Security/Login', json=login_data).json()
         if "error" in response:
-            return None
+            try:
+                response = requests.post('https://apps.blueprojects.com.br/fb/Security/Login', json=login_data).json()
+            except Exception as e:
+                return None
         elif response["data"]["success"]:
             return response
         else:
