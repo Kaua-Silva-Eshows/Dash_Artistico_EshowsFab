@@ -19,19 +19,24 @@ def authenticate(userName: str, userPassword: str):
         "loginSource": 1,
     }
     
-    try :
-        response = requests.post('https://api.eshows.com.br/v1/Security/Login', json=login_data).json()
-        if "error" in response:
-            try:
-                response = requests.post('https://apps.blueprojects.com.br/fb/Security/Login', json=login_data).json()
-            except Exception as e:
-                return None
-        elif response["data"]["success"]:
+    try:
+        response = requests.post('https://api.eshows.com.br/v1/Security/Login',json=login_data,timeout=10).json()
+
+        if response.get("data", {}).get("success"):
             return response
         else:
-            return None
+            try:
+                response = requests.post('https://apps.blueprojects.com.br/fb/Security/Login',json=login_data,timeout=10).json()
+
+                if response.get("data", {}).get("success"):
+                    return response
+                return None
+            except Exception as e:
+                return None
+
     except Exception as e:
-            st.error("Não foi possível acessar seu login")
+        st.error("Não foi possível acessar seu login")
+        return None
 
 def main():
     initialize_session_state()
